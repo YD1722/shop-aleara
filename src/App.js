@@ -5,18 +5,44 @@ import {Switch,Route} from 'react-router-dom';
 import ShopPage from './components/shop/shop.component';
 import Header from './components/header/header.component';
 import AuthHome from './components/authentication/auth-home/auth-home.component';
+import { defaultAuth } from './firebase/firebase.utils';
 
-function App() {
-  return (
-    <div>
-      <Header />
-      <Switch>
-        <Route exact path='/' component={HomePage}/>
-        <Route exact path='/shop' component={ShopPage}/>
-        <Route exact path='/auth' component={AuthHome}/>
-      </Switch>
-    </div>
-  );
+class App extends React.Component{
+  constructor(){
+    super();
+
+    this.state = {
+      currentUser : null
+    }
+  }
+
+  unsubscribeFromAuth = null;;
+
+  componentDidMount() {
+    this.unsubscribeFromAuth = defaultAuth.onAuthStateChanged(user=>{
+      this.setState({currentUser: user})
+
+    console.log(user);
+
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeFromAuth(); 
+  }
+
+  render(){
+    return (
+      <div>
+        <Header />
+        <Switch>
+          <Route exact path='/' component={HomePage}/>
+          <Route exact path='/shop' component={ShopPage}/>
+          <Route exact path='/auth' component={AuthHome}/>
+        </Switch>
+      </div>
+    );
+  }
 }
 
 export default App;
