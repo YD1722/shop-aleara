@@ -1,61 +1,63 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 
-import HomePage from './components/home-page/home.component.jsx';
-import {Switch,Route} from 'react-router-dom';
-import ShopPage from './components/shop/shop.component';
-import Header from './components/header/header.component';
-import AuthHome from './components/authentication/auth-home/auth-home.component';
-import { defaultAuth, createUserProfileDocument } from './firebase/firebase.utils';
-
-class App extends React.Component{
-  constructor(){
-    super();
-
-    this.state = {
-      currentUser : null
-    }
-  }
-
-  unsubscribeFromAuth = null;;
+import HomePage from "./components/home-page/home.component.jsx";
+import { Switch, Route } from "react-router-dom";
+import ShopPage from "./components/shop/shop.component";
+import Header from "./components/header/header.component";
+import AuthHome from "./components/authentication/auth-home/auth-home.component";
+import {
+  defaultAuth,
+  createUserProfileDocument,
+} from "./firebase/firebase.utils";
+import { setCurrentUser } from "./redux/user-actions";
+import { connect } from "react-redux";
+class App extends React.Component {
+  unsubscribeFromAuth = null;
 
   componentDidMount() {
-    this.unsubscribeFromAuth = defaultAuth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
+    const { setCurrentUser } = this.props;
 
-        userRef.onSnapshot(snapShot => {
-          this.setState({
-            currentUser: {
+    this.unsubscribeFromAuth = defaultAuth.onAuthStateChanged(
+      async (userAuth) => {
+        if (userAuth) {
+          const userRef = await createUserProfileDocument(userAuth);
+
+          userRef.onSnapshot((snapShot) => {
+            setCurrentUser({
               id: snapShot.id,
-              ...snapShot.data()
-            }
+              ...snapShot.data(),
+            });
           });
+        }
 
-          console.log(this.state);
-        });
+        setCurrentUser(userAuth);
       }
-
-      this.setState({ currentUser: userAuth });
-    });
+    );
   }
 
   componentWillUnmount() {
-    this.unsubscribeFromAuth();  
+    if (this.unsubscribeFromAuth) {
+      this.unsubscribeFromAuth();
+    }
   }
 
-  render(){
+  render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser}/>
+        <Header />
         <Switch>
-          <Route exact path='/' component={HomePage}/>
-          <Route exact path='/shop' component={ShopPage}/>
-          <Route exact path='/signin' component={AuthHome}/>
+          <Route exact path="/" component={HomePage} />
+          <Route exact path="/shop" component={ShopPage} />
+          <Route exact path="/signin" component={AuthHome} />
         </Switch>
       </div>
     );
   }
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(null, mapDispatchToProps)(App);

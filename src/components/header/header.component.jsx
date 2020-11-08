@@ -1,5 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 import {ReactComponent as Logo} from '../../assets/logo.svg'
 import { defaultAuth } from '../../firebase/firebase.utils';
 
@@ -24,4 +25,16 @@ const Header = ({currentUser})=>(
     </div>
 )
 
-export default Header;
+
+
+const mapStateToProps = rootReducer => ({
+    currentUser : rootReducer.user.currentUser
+})
+
+/**
+ * If a mapStateToProps function is specified, the new wrapper component will subscribe to Redux store updates. 
+ * This means that any time the store is updated, mapStateToProps will be called. 
+ * The results of mapStateToProps must be a plain object, which will be merged into the wrapped component’s props. 
+ * If you don't want to subscribe to store updates, pass null or undefined in place of mapStateToProps.
+ */
+export default connect(mapStateToProps)(Header);

@@ -8,7 +8,7 @@ const userReducer =  (state = INITIAL_STATE, action) => {
             ...state,
             currentUser: action.payload
         }
-    }else {
+    } else {
         return state;   
     }
 }
