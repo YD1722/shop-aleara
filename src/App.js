@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-
 import HomePage from "./components/home-page/home.component.jsx";
 import { Switch, Route, Redirect } from "react-router-dom";
 import ShopPage from "./components/shop/shop.component";
