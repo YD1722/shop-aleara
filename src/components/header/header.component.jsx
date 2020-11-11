@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { ReactComponent as Logo } from "../../assets/logo.svg";
 import { defaultAuth } from "../../firebase/firebase.utils";
-import "./header.styles.scss";
 import CartIcon from "../cart-icon/cart-icon.component";
+
+import "./header.styles.scss";
 
 const Header = ({ currentUser }) => (
   <div className="header">

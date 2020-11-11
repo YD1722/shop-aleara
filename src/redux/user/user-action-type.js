@@ -1,3 +1,4 @@
 export const UserAction = {
   SET_CURRENT_USER: "SET_CURRENT_USER",
+  ADD_ITEM_TO_CART: "ADD_ITEM_TO_CART",
 };
