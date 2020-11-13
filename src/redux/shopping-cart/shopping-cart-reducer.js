@@ -1,7 +1,9 @@
 import { UserAction } from "../user/user-action-type";
+import { CartAction } from "./cart-action-type";
 
 const INITIAL_STATE = {
   itemList: [],
+  isShowDropdown: true,
 };
 
 /**
@@ -12,15 +14,26 @@ const INITIAL_STATE = {
  * @returns {{itemList: []} & {itemList: *[]}}
  */
 const shoppingCartReducer = (state = INITIAL_STATE, action) => {
-  if (action.type === UserAction.ADD_ITEM_TO_CART) {
-    const newState = Object.assign({}, state, {
-      itemList: [...state.itemList, action.payload],
-    });
+  let newState = state;
 
-    return newState;
-  } else {
-    return state;
+  switch (action.type) {
+    case UserAction.ADD_ITEM_TO_CART:
+      newState = Object.assign({}, state, {
+        itemList: [...state.itemList, action.payload],
+      });
+
+      break;
+
+    case CartAction.TOGGLE_CART_DROPDOWN:
+      newState = {
+        ...state,
+        isShowDropdown: !state.isShowDropdown,
+      };
+
+      break;
   }
+
+  return newState;
 };
 
 export default shoppingCartReducer;

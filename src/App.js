@@ -8,7 +8,7 @@ import {
   defaultAuth,
   createUserProfileDocument,
 } from "./firebase/firebase.utils";
-import { setCurrentUser } from "./redux/user-actions";
+import { setCurrentUser } from "./redux/user/user-actions";
 import { connect } from "react-redux";
 import AuthHome from "./components/authentication/auth-home/auth-home.component";
 
